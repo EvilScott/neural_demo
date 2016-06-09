@@ -6,8 +6,12 @@ canvas#digit {
     border: 1px solid #777;
 }
 
+canvas#digit.drawing {
+    cursor: crosshair;
+}
+
 ul#guess li {
-    color: #ccc;
+    color: #333;
 }
 
 ul#guess li.actual {
@@ -18,11 +22,20 @@ ul#guess li.actual {
 ul#guess li span {
     margin: 0 5px;
     display: inline-block;
-    background-color: #ccc;
+    background-color: #333;
     height: 10px;
     line-height: 10px;
 }
 
 ul#guess li.actual span {
     background-color: #080;
+}
+
+.buttons {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.buttons button {
+    width: 170px;
 }

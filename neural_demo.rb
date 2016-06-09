@@ -24,6 +24,14 @@ class NeuralDemo < Sinatra::Base
     File.read(File.join(__dir__, 'public', 'index.html'))
   end
 
+  post '/process' do
+    guess = $net.evaluate(params[:pixels].map(&:to_f))
+    normalized_guess = guess.map { |k| (k  * 100 / guess.reduce(:+)).round(2) }
+
+    content_type :json
+    { guess: normalized_guess }.to_json
+  end
+
   get '/random' do
     example = $test_images.sample
     guess = $net.evaluate(example.last)
