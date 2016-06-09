@@ -13,6 +13,7 @@ var NeuralDemo = {
         NeuralDemo.initDrawing();
     },
 
+    // wire up the buttons
     initButtons: function() {
         $('button#get-random').click(NeuralDemo.getRandom);
         $('button#hand-draw').click(function() {
@@ -24,10 +25,10 @@ var NeuralDemo = {
         });
     },
 
+    // wire up drawing on the canvas
     initDrawing: function() {
         NeuralDemo.canvas.onmousedown = function(e) {
             NeuralDemo.isFreeDraw = true;
-            NeuralDemo.context.lineWidth = 2;
             NeuralDemo.context.lineJoin = NeuralDemo.context.lineCap = 'round';
             NeuralDemo.context.moveTo(e.layerX / 10, e.layerY / 10);
         };
@@ -44,15 +45,22 @@ var NeuralDemo = {
         };
     },
 
+    // clear the canvas
+    clearCanvas: function() {
+        NeuralDemo.context.clearRect(0, 0, 28, 28);
+        NeuralDemo.context.beginPath();
+    },
+
+    // flip the button and toggle canvas as drawable
     startDraw: function() {
         $('ul#guess').html('');
         $('button#hand-draw').text('Process image');
         NeuralDemo.$canvas.addClass('drawing');
         NeuralDemo.drawing = true;
-        NeuralDemo.context.clearRect(0, 0, 28, 28);
-        NeuralDemo.context.beginPath();
+        NeuralDemo.clearCanvas();
     },
 
+    // process the drawn number
     processDraw: function() {
         var i, data;
         var pixels = [];
@@ -63,7 +71,15 @@ var NeuralDemo = {
         for (i = 3; i < data.length; i += 4) {
             pixels.push(data[i]);
         }
-        $.post('/process', {pixels: pixels}, function(res) {
+
+        NeuralDemo.clearCanvas();
+        pixels.forEach(function(val, idx) {
+            val = 255 - val;
+            NeuralDemo.context.fillStyle = 'rgb(' + val + ',' + val + ',' + val + ')';
+            NeuralDemo.context.fillRect(idx % 28, Math.floor(idx / 28), 1, 1);
+        });
+
+        $.post('/process', { pixels: pixels }, function(res) {
             $('ul#guess').html(res.guess.map(function(g, i) {
                 return '<li>' + i + '<span class="bar" style="width:'
                     + g * 4 + ';">&nbsp;</span>' + g + '%</li>';
@@ -71,6 +87,7 @@ var NeuralDemo = {
         });
     },
 
+    // get a random piece of data from MNIST
     getRandom: function() {
         $('button#hand-draw').text('Hand draw');
         NeuralDemo.$canvas.removeClass('drawing');
