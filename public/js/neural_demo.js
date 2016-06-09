@@ -15,7 +15,8 @@ var NeuralDemo = {
                 NeuralDemo.context.fillRect(idx % 28, Math.floor(idx / 28), 1, 1);
             });
             $('ul#guess').html(res.guess.map(function(g, i) {
-                return '<li' + (i === res.actual ? ' class="actual"' : '') + '>' + i + ': ' + g + '%</li>';
+                return '<li' + (i === res.actual ? ' class="actual"' : '') + '>' + i
+                    + '<span class="bar" style="width:' + g * 4 + ';">&nbsp;</span>' + g + '%</li>';
             }).join("\n"));
         });
     }

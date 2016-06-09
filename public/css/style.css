@@ -14,3 +14,15 @@ ul#guess li.actual {
     font-weight: bold;
     color: #080;
 }
+
+ul#guess li span {
+    margin: 0 5px;
+    display: inline-block;
+    background-color: #ccc;
+    height: 10px;
+    line-height: 10px;
+}
+
+ul#guess li.actual span {
+    background-color: #080;
+}
